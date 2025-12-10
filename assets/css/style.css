@@ -444,3 +444,235 @@ footer {
         font-size: 1.2rem;
     }
 }
+
+/* Pricing Simulator Styles */
+
+.pricing-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .pricing-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Module List */
+.module-list {
+    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.module-list-header {
+    display: grid;
+    grid-template-columns: 50px 1fr 100px 50px;
+    /* Adjusted columns */
+    padding: 1.5rem;
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--concrete-dark);
+    letter-spacing: 0.1em;
+}
+
+.module-item {
+    display: grid;
+    grid-template-columns: 50px 1fr 100px 50px;
+    /* Adjusted columns */
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-items: center;
+}
+
+.module-item:last-child {
+    border-bottom: none;
+}
+
+.module-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.module-item.selected {
+    background: rgba(251, 191, 36, 0.1);
+    /* Gold tint */
+    border-left: 2px solid var(--accent-gold);
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--concrete-dark);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    position: relative;
+    grid-column: 4;
+    /* Move checkbox to the end or start? Let's keep visually consistent */
+}
+
+/* Re-adjusting grid for visual flow: Checkbox first? usually better. 
+   My HTML has checkbox div first in DOM, but visually I might want ID first.
+   Let's check HTML structure: checkbox, id, name, price.
+   CSS Grid columns: 50px (checkbox) 50px (ID) 1fr (Name) 100px (Price).
+*/
+.module-list-header {
+    grid-template-columns: 50px 50px 1fr 100px;
+}
+
+.module-item {
+    grid-template-columns: 50px 50px 1fr 100px;
+}
+
+.checkbox-custom {
+    grid-column: 1;
+    /* First column */
+}
+
+
+.module-item.selected .checkbox-custom {
+    background-color: var(--accent-gold);
+    border-color: var(--accent-gold);
+}
+
+.module-item.selected .checkbox-custom::after {
+    content: '\f00c';
+    /* FontAwesome check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 12px;
+    color: var(--primary-blue);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mod-id {
+    font-family: var(--font-mono);
+    color: var(--concrete-dark);
+    font-size: 0.9rem;
+}
+
+.mod-name {
+    font-weight: 500;
+}
+
+.mod-price {
+    font-family: var(--font-mono);
+    color: var(--concrete-grey);
+    text-align: right;
+}
+
+/* Sidebar Summary */
+.pricing-sidebar {
+    position: sticky;
+    top: 120px;
+}
+
+.summary-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--accent-gold);
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.summary-header h3 {
+    font-size: 1.2rem;
+    color: var(--white);
+}
+
+.currency {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--concrete-dark);
+}
+
+.price-display {
+    font-family: var(--font-mono);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    margin: 1.5rem 0;
+    letter-spacing: -2px;
+}
+
+.savings-badge {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.2);
+    /* Green tint */
+    color: #34d399;
+    /* Green text */
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.savings-badge.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+.summary-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.full-width {
+    width: 100%;
+    text-align: center;
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid var(--concrete-dark);
+    color: var(--concrete-grey);
+    padding: 0.8rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+    border-color: var(--white);
+    color: var(--white);
+}
+
+.summary-notes {
+    margin-top: 2rem;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--concrete-dark);
+}
+
+.summary-notes li {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

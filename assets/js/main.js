@@ -97,4 +97,149 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 5. Pricing Simulator Logic
+    const moduleItems = document.querySelectorAll('.module-item');
+    const finalPriceEl = document.getElementById('final-price');
+    const savingsBadge = document.getElementById('savings-badge');
+    const savingsAmountEl = document.getElementById('savings-amount');
+    const btnSelectAll = document.getElementById('btn-select-all');
+    const btnRequestQuote = document.getElementById('btn-request-quote');
+
+    if (moduleItems.length > 0 && finalPriceEl) {
+
+        let selectedModules = new Set();
+        const BUNDLE_PRICE = 200.00;
+
+        function updatePricing() {
+            let currentTotal = 0;
+
+            // Calculate sum of selected
+            moduleItems.forEach(item => {
+                if (item.classList.contains('selected')) {
+                    currentTotal += parseFloat(item.dataset.price);
+                }
+            });
+
+            let displayPrice = currentTotal;
+            let savings = 0;
+            let isBundleApplied = false;
+
+            // Check if all are selected manually
+            const allSelected = document.querySelectorAll('.module-item.selected').length === moduleItems.length;
+
+            if (currentTotal > BUNDLE_PRICE || allSelected) {
+                displayPrice = BUNDLE_PRICE;
+                savings = currentTotal - BUNDLE_PRICE;
+                isBundleApplied = true;
+            }
+
+            // Update UI
+            finalPriceEl.textContent = `$${displayPrice.toFixed(2)}`;
+
+            // Savings Badge
+            if (isBundleApplied && savings > 0) {
+                savingsBadge.classList.remove('hidden');
+                savingsBadge.style.display = 'inline-block';
+                savingsAmountEl.textContent = `$${savings.toFixed(2)}`;
+            } else if (allSelected && savings === 0 && currentTotal === BUNDLE_PRICE) {
+                // Case where sum matches bundle exactly
+                savingsBadge.classList.add('hidden');
+            } else {
+                savingsBadge.classList.add('hidden');
+                setTimeout(() => {
+                    if (savingsBadge.classList.contains('hidden')) savingsBadge.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        // Click Handlers
+        moduleItems.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('selected');
+                updatePricing();
+
+                // Update "Select All" button text logic could go here
+                if (btnSelectAll) {
+                    const allSelected = document.querySelectorAll('.module-item.selected').length === moduleItems.length;
+                    btnSelectAll.textContent = allSelected ? "Deseleccionar Todo" : "Seleccionar Todo";
+                }
+            });
+        });
+
+        // Select All Button
+        if (btnSelectAll) {
+            btnSelectAll.addEventListener('click', () => {
+                const allSelected = document.querySelectorAll('.module-item.selected').length === moduleItems.length;
+
+                if (allSelected) {
+                    // Deselect all
+                    moduleItems.forEach(item => item.classList.remove('selected'));
+                    btnSelectAll.textContent = "Seleccionar Todo";
+                } else {
+                    // Select all
+                    moduleItems.forEach(item => item.classList.add('selected'));
+                    btnSelectAll.textContent = "Deseleccionar Todo";
+                }
+                updatePricing();
+            });
+        }
+
+        // Request Quote Button Logic
+        if (btnRequestQuote) {
+            btnRequestQuote.addEventListener('click', (e) => {
+                e.preventDefault(); // Stop default link behavior
+
+                const selectedItems = document.querySelectorAll('.module-item.selected');
+
+                if (selectedItems.length === 0) {
+                    alert("Por favor seleccione al menos un módulo para cotizar.");
+                    return;
+                }
+
+                // Check Bundle Status
+                const currentTotal = Array.from(selectedItems).reduce((sum, item) => sum + parseFloat(item.dataset.price), 0);
+                const allSelected = selectedItems.length === moduleItems.length;
+                const isBundle = currentTotal > BUNDLE_PRICE || allSelected;
+
+                let message = "Hola, equipo Showcrete.\n\nEstoy interesado en adquirir una licencia comercial.\n";
+
+                if (isBundle) {
+                    message += "He seleccionado la SUITE COMPLETA (Bundle) con todos los módulos incluidos.\n\n";
+                    message += `Inversión estimada: $${BUNDLE_PRICE.toFixed(2)} USD/año\n`;
+                } else {
+                    message += "Módulos seleccionados:\n";
+                    selectedItems.forEach(item => {
+                        const name = item.querySelector('.mod-name').textContent;
+                        const id = item.querySelector('.mod-id').textContent;
+                        const price = item.querySelector('.mod-price').textContent;
+                        message += `- [${id}] ${name} (${price})\n`;
+                    });
+                    message += `\nInversión estimada: $${currentTotal.toFixed(2)} USD/año\n`;
+                }
+
+                message += "\nSolicito información sobre métodos de pago y proceso de activación.";
+
+                // Redirect to contact page with message in URL
+                const encodedMessage = encodeURIComponent(message);
+                window.location.href = `contacto.html?quote=${encodedMessage}`;
+            });
+        }
+    }
+
+    // 6. Contact Page Auto-Fill
+    const contactMessage = document.getElementById('contact-message');
+    if (contactMessage) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const quote = urlParams.get('quote');
+        if (quote) {
+            contactMessage.value = decodeURIComponent(quote);
+            contactMessage.readOnly = true; // Prevent editing to avoid fraud
+            contactMessage.style.opacity = '0.7'; // Visual indication
+            contactMessage.style.cursor = 'not-allowed';
+
+            // Optional: Scroll to form
+            contactMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
 });
