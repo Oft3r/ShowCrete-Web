@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información | SHOWCRETE</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Roboto+Mono:wght@300;400&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Animation Layer -->
+    <div id="construction-layer"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">Showcrete</a>
+
+        <button class="mobile-menu-btn" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="informacion.html" class="nav-link"
+                style="border-bottom: 2px solid var(--accent-gold);">Filosofía</a>
+            <a href="descargas.html" class="nav-link">Descargas</a>
+            <a href="faq.html" class="nav-link">FAQ</a>
+            <a href="contacto.html" class="nav-link">Contacto</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Page Header -->
+        <section class="container visible" style="padding-top: 15rem; padding-bottom: 5rem;">
+            <span class="hero-tagline">ESPECIFICACIONES TÉCNICAS</span>
+            <h1>Arquitectura<br>del Sistema</h1>
+        </section>
+
+        <!-- Overview -->
+        <section class="container" style="margin-bottom: 8rem;">
+            <div class="feature-item" style="border-left: 2px solid var(--accent-gold); padding-left: 2rem;">
+                <p style="font-size: 1.5rem; line-height: 1.4;">
+                    Showcrete permite realizar el diseño de elementos estructurales de hormigón armado con una idoneidad
+                    técnica absoluta.
+                    Resuelve la complejidad del cálculo estructural mediante una interfaz que privilegia la claridad y
+                    la precisión.
+                </p>
+            </div>
+        </section>
+
+        <!-- Modules Grid -->
+        <section class="container">
+            <h2 style="margin-bottom: 4rem;">Módulos de Análisis</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+
+                <!-- Module 1 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p01.jpg" alt="Diseño a Flexión" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-01</span>
+                        <h3>Elementos a Flexión</h3>
+                        <p>
+                            Cálculo de área de acero a compresión y tracción. Basado en NC 207:2019 y ACI 318.
+                            Determina profundidad de línea neutra y dominios de deformación.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p02.jpg" alt="Flexocompresión" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-02</span>
+                        <h3>Flexocompresión</h3>
+                        <p>
+                            Análisis de interacción P-M. Generación de diagramas de interacción.
+                            Soporta efectos de esbeltez y análisis de segundo orden.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p03.jpg" alt="Cortante" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-03</span>
+                        <h3>Cortante</h3>
+                        <p>
+                            Diseño de estribos por capacidad a cortante. Considera contribución del concreto Vc y acero
+                            Vs.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p04.jpg" alt="Deformaciones" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-04</span>
+                        <h3>Deformaciones</h3>
+                        <p>
+                            Cálculo de deflexiones inmediatas y diferidas (fluencia/retracción). Control de fisuración.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 5 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p05.jpg" alt="Fisuración" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-05</span>
+                        <h3>Fisuración</h3>
+                        <p>
+                            Estimación de ancho de fisura según modelos de Gergely-Lutz y Frosch.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 6 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p06.jpg" alt="Cimientos Aislados" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-06</span>
+                        <h3>Cimientos Aislados</h3>
+                        <p>
+                            Diseño geotécnico (capacidad portante) y estructural (flexión/punzonamiento).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 7 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p07.jpg" alt="Muros en Voladizo" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-07</span>
+                        <h3>Muros en Voladizo</h3>
+                        <p>
+                            Estabilidad al volcamiento y deslizamiento. Diseño del vástago, puntera y talón.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 8 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p08.jpg" alt="Losas (MDD)" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-08</span>
+                        <h3>Losas (MDD)</h3>
+                        <p>
+                            Método de Diseño Directo para sistemas de losas en dos direcciones.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Integration Section -->
+        <section class="container" style="margin-top: 8rem;">
+            <div class="grid-2">
+                <div>
+                    <span class="hero-tagline">INTEROPERABILIDAD</span>
+                    <h2>Ecosistema<br>BIM</h2>
+                </div>
+                <div>
+                    <ul style="list-style: none; font-family: var(--font-mono); opacity: 0.8;">
+                        <li
+                            style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                            <span style="color: var(--accent-gold); margin-right: 1rem;">>>></span>
+                            Importación desde SAP2000 / ETABS (API CSI)
+                        </li>
+                        <li
+                            style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                            <span style="color: var(--accent-gold); margin-right: 1rem;">>>></span>
+                            Exportación a Autodesk Revit (Familias Parametrizadas)
+                        </li>
+                        <li
+                            style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                            <span style="color: var(--accent-gold); margin-right: 1rem;">>>></span>
+                            Generación de planos DXF (AutoCAD)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer style="margin-top: 5rem;">
+        <div>&copy; 2024 Showcrete. Engineering by Design.</div>
+        <div style="opacity: 0.5;">La Habana, Cuba</div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
