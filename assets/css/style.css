@@ -119,8 +119,10 @@ h3 {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    mix-blend-mode: difference;
-    /* Ensures visibility on both light and dark */
+    background-color: rgb(15, 23, 42);
+    /* Solid color, same as mobile menu */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Shadow for depth */
 }
 
 .nav-logo {
