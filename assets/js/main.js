@@ -242,46 +242,91 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 7. Interactive Module Grid Animation
+    // 7. Interactive Module Grid Animation & Mobile Modal
     const modulesGrid = document.getElementById('modules-grid');
     if (modulesGrid) {
+        // Create Mobile Modal Container if it doesn't exist
+        let mobileModal = document.getElementById('mobile-module-modal');
+        if (!mobileModal) {
+            mobileModal = document.createElement('div');
+            mobileModal.id = 'mobile-module-modal';
+            mobileModal.innerHTML = `
+                <div class="mobile-modal-content">
+                    <div class="mobile-modal-body"></div>
+                </div>
+            `;
+            document.body.appendChild(mobileModal);
+            
+            // Event delegation for close button since it's re-created
+            mobileModal.addEventListener('click', (e) => {
+                if (e.target.closest('.mobile-modal-close')) {
+                    mobileModal.classList.remove('active');
+                    document.body.style.overflow = ''; // Restore scrolling
+                }
+            });
+        }
+
         const moduleCards = modulesGrid.querySelectorAll('.module-card');
 
         moduleCards.forEach((card, index) => {
             card.addEventListener('click', (e) => {
-                // Prevent triggering if clicking close button
-                if (e.target.closest('.close-module-btn')) return;
-
-                // If already expanded, do nothing (close button handles reset)
-                if (card.classList.contains('expanded')) return;
-
-                // Expand this card
-                // Prevent grid collapse by setting fixed height
                 const isMobile = window.innerWidth <= 768;
-                
-                if (!isMobile) {
+
+                if (isMobile) {
+                    // --- MOBILE LOGIC (Portal Modal) ---
+                    // Clone content to the separate modal to avoid stacking context issues
+                    const modalBody = mobileModal.querySelector('.mobile-modal-body');
+                    const imageSrc = card.querySelector('img').src;
+                    const title = card.querySelector('h3').textContent;
+                    const number = card.querySelector('.feature-number').textContent;
+                    const desc = card.querySelector('p').textContent;
+                    const details = card.querySelector('.module-details p').textContent;
+
+                    modalBody.innerHTML = `
+                        <div class="mobile-modal-image-container">
+                            <img src="${imageSrc}" alt="${title}">
+                        </div>
+                        <span class="feature-number" style="color: var(--accent-gold); display:block; margin-top:1rem;">${number}</span>
+                        <h3 style="font-size: 1.8rem; margin: 0.5rem 0;">${title}</h3>
+                        <p style="opacity: 0.8; margin-bottom: 1rem;">${desc}</p>
+                        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; margin-top: 1rem;">
+                            <p>${details}</p>
+                        </div>
+                        <button class="mobile-modal-close"><i class="fas fa-times"></i> Cerrar</button>
+                    `;
+
+                    mobileModal.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Lock body scroll
+                    
+                } else {
+                    // --- DESKTOP LOGIC (Original Expansion) ---
+                    
+                    // Prevent triggering if clicking close button
+                    if (e.target.closest('.close-module-btn')) return;
+
+                    // If already expanded, do nothing (close button handles reset)
+                    if (card.classList.contains('expanded')) return;
+
                     modulesGrid.style.height = `${modulesGrid.offsetHeight}px`;
                     modulesGrid.style.minHeight = '600px';
+
+                    card.classList.add('expanded');
+                    modulesGrid.classList.add('expanded-active');
+
+                    // Animate other cards into a spiral stack behind
+                    let spiralIndex = 0;
+                    moduleCards.forEach((otherCard) => {
+                        if (otherCard !== card) {
+                            otherCard.classList.add('hidden-stack');
+                            otherCard.classList.remove('spiral-0', 'spiral-1', 'spiral-2', 'spiral-3', 'spiral-4', 'spiral-5', 'spiral-6', 'spiral-7');
+                            otherCard.classList.add(`spiral-${spiralIndex % 8}`);
+                            spiralIndex++;
+                        }
+                    });
                 }
-
-                card.classList.add('expanded');
-                modulesGrid.classList.add('expanded-active');
-
-                // Animate other cards into a spiral stack behind
-                let spiralIndex = 0;
-                moduleCards.forEach((otherCard) => {
-                    if (otherCard !== card) {
-                        otherCard.classList.add('hidden-stack');
-                        // Assign spiral class based on index to create stepped effect
-                        // Remove old spiral classes first
-                        otherCard.classList.remove('spiral-0', 'spiral-1', 'spiral-2', 'spiral-3', 'spiral-4', 'spiral-5', 'spiral-6', 'spiral-7');
-                        otherCard.classList.add(`spiral-${spiralIndex % 8}`);
-                        spiralIndex++;
-                    }
-                });
             });
 
-            // Close Button Logic
+            // Close Button Logic (Desktop Only)
             const closeBtn = card.querySelector('.close-module-btn');
             if (closeBtn) {
                 closeBtn.addEventListener('click', (e) => {
@@ -291,12 +336,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.classList.remove('expanded');
                     modulesGrid.classList.remove('expanded-active');
                     
-                    // Reset grid height only for desktop
-                    const isMobile = window.innerWidth <= 768;
-                    if (!isMobile) {
-                        modulesGrid.style.height = '';
-                        modulesGrid.style.minHeight = '';
-                    }
+                    modulesGrid.style.height = '';
+                    modulesGrid.style.minHeight = '';
 
                     // Reset all other cards
                     moduleCards.forEach(otherCard => {
