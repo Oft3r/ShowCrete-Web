@@ -257,10 +257,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Expand this card
                 // Prevent grid collapse by setting fixed height
-                modulesGrid.style.height = `${modulesGrid.offsetHeight}px`;
-                modulesGrid.style.minHeight = '600px'; // Ensure enough space for expanded card
+                const isMobile = window.innerWidth <= 768;
+                
+                if (!isMobile) {
+                    modulesGrid.style.height = `${modulesGrid.offsetHeight}px`;
+                    modulesGrid.style.minHeight = '600px';
+                }
 
                 card.classList.add('expanded');
+                modulesGrid.classList.add('expanded-active');
 
                 // Animate other cards into a spiral stack behind
                 let spiralIndex = 0;
@@ -284,10 +289,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // Reset this card
                     card.classList.remove('expanded');
+                    modulesGrid.classList.remove('expanded-active');
                     
-                    // Reset grid height
-                    modulesGrid.style.height = '';
-                    modulesGrid.style.minHeight = '';
+                    // Reset grid height only for desktop
+                    const isMobile = window.innerWidth <= 768;
+                    if (!isMobile) {
+                        modulesGrid.style.height = '';
+                        modulesGrid.style.minHeight = '';
+                    }
 
                     // Reset all other cards
                     moduleCards.forEach(otherCard => {

@@ -327,6 +327,10 @@ footer {
 }
 
 /* Module Cards with Images */
+#modules-grid {
+    position: relative;
+}
+
 .module-card {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(15, 23, 42, 0.9);
@@ -532,6 +536,69 @@ footer {
 
     .nav-link {
         font-size: 1.2rem;
+    }
+
+    /* Module Cards Mobile Animation */
+    /* Background overlay for mobile expanded cards */
+    #modules-grid::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 40;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        display: none;
+    }
+
+    #modules-grid.expanded-active::before {
+        opacity: 1;
+        pointer-events: auto;
+        display: block;
+    }
+
+    .module-card.expanded {
+        width: 95%;
+        max-width: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 8px;
+        z-index: 51;
+    }
+
+    .module-card.expanded .module-image-container {
+        height: 200px;
+    }
+
+    .module-card.hidden-stack {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    /* Simplified spiral animation for mobile - scale down instead of large translations */
+    .module-card.spiral-0 { transform: translate(-50%, -50%) scale(0.8); opacity: 0.4; }
+    .module-card.spiral-1 { transform: translate(-50%, -50%) scale(0.75); opacity: 0.3; }
+    .module-card.spiral-2 { transform: translate(-50%, -50%) scale(0.7); opacity: 0.2; }
+    .module-card.spiral-3 { transform: translate(-50%, -50%) scale(0.65); opacity: 0.15; }
+    .module-card.spiral-4 { transform: translate(-50%, -50%) scale(0.6); opacity: 0.1; }
+    .module-card.spiral-5 { transform: translate(-50%, -50%) scale(0.55); opacity: 0.08; }
+    .module-card.spiral-6 { transform: translate(-50%, -50%) scale(0.5); opacity: 0.06; }
+    .module-card.spiral-7 { transform: translate(-50%, -50%) scale(0.45); opacity: 0.04; }
+
+    .module-details {
+        padding-right: 10px;
+    }
+
+    .close-module-btn {
+        width: 100%;
     }
 }
 
