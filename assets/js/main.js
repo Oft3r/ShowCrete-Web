@@ -242,4 +242,61 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // 7. Interactive Module Grid Animation
+    const modulesGrid = document.getElementById('modules-grid');
+    if (modulesGrid) {
+        const moduleCards = modulesGrid.querySelectorAll('.module-card');
+
+        moduleCards.forEach((card, index) => {
+            card.addEventListener('click', (e) => {
+                // Prevent triggering if clicking close button
+                if (e.target.closest('.close-module-btn')) return;
+
+                // If already expanded, do nothing (close button handles reset)
+                if (card.classList.contains('expanded')) return;
+
+                // Expand this card
+                // Prevent grid collapse by setting fixed height
+                modulesGrid.style.height = `${modulesGrid.offsetHeight}px`;
+                modulesGrid.style.minHeight = '600px'; // Ensure enough space for expanded card
+
+                card.classList.add('expanded');
+
+                // Animate other cards into a spiral stack behind
+                let spiralIndex = 0;
+                moduleCards.forEach((otherCard) => {
+                    if (otherCard !== card) {
+                        otherCard.classList.add('hidden-stack');
+                        // Assign spiral class based on index to create stepped effect
+                        // Remove old spiral classes first
+                        otherCard.classList.remove('spiral-0', 'spiral-1', 'spiral-2', 'spiral-3', 'spiral-4', 'spiral-5', 'spiral-6', 'spiral-7');
+                        otherCard.classList.add(`spiral-${spiralIndex % 8}`);
+                        spiralIndex++;
+                    }
+                });
+            });
+
+            // Close Button Logic
+            const closeBtn = card.querySelector('.close-module-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent card click event
+                    
+                    // Reset this card
+                    card.classList.remove('expanded');
+                    
+                    // Reset grid height
+                    modulesGrid.style.height = '';
+                    modulesGrid.style.minHeight = '';
+
+                    // Reset all other cards
+                    moduleCards.forEach(otherCard => {
+                        otherCard.classList.remove('hidden-stack');
+                        otherCard.classList.remove('spiral-0', 'spiral-1', 'spiral-2', 'spiral-3', 'spiral-4', 'spiral-5', 'spiral-6', 'spiral-7');
+                    });
+                });
+            }
+        });
+    }
+
 });

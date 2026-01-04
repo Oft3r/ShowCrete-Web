@@ -65,7 +65,7 @@
         <section class="container">
             <h2 style="margin-bottom: 4rem;">Módulos de Análisis</h2>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div id="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; position: relative;">
 
                 <!-- Module 1 -->
                 <div class="module-card">
@@ -79,6 +79,10 @@
                             Cálculo de área de acero a compresión y tracción. Basado en NC 207:2019 y ACI 318.
                             Determina profundidad de línea neutra y dominios de deformación.
                         </p>
+                        <div class="module-details">
+                            <p>Este módulo permite un análisis exhaustivo de vigas y secciones rectangulares sometidas a flexión pura. Incluye verificación de cuantías mínimas y máximas, cálculo de deformación unitaria en el acero y concreto, y generación de reportes detallados paso a paso.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -94,6 +98,10 @@
                             Análisis de interacción P-M. Generación de diagramas de interacción.
                             Soporta efectos de esbeltez y análisis de segundo orden.
                         </p>
+                        <div class="module-details">
+                            <p>Genera diagramas de interacción 2D y 3D para columnas rectangulares y circulares. Considera efectos de esbeltez mediante el método de amplificación de momentos, permitiendo evaluar la estabilidad global de pórticos.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -109,6 +117,10 @@
                             Diseño de estribos por capacidad a cortante. Considera contribución del concreto Vc y acero
                             Vs.
                         </p>
+                        <div class="module-details">
+                            <p>Optimiza la distribución de estribos a lo largo del elemento. Permite definir zonas de confinamiento sísmico y calcula la resistencia al corte considerando la interacción con momento flector y fuerza axial.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -123,6 +135,10 @@
                         <p>
                             Cálculo de deflexiones inmediatas y diferidas (fluencia/retracción). Control de fisuración.
                         </p>
+                        <div class="module-details">
+                            <p>Calcula la inercia efectiva (Ie) según Branson o ACI 318-19. Estima deflexiones a largo plazo considerando coeficientes de fluencia y retracción del concreto, asegurando el cumplimiento de límites de servicio.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -137,6 +153,10 @@
                         <p>
                             Estimación de ancho de fisura según modelos de Gergely-Lutz y Frosch.
                         </p>
+                        <div class="module-details">
+                            <p>Verifica el espaciamiento máximo de refuerzo para control de fisuración en vigas y losas. Implementa ecuaciones normativas para ambientes agresivos y condiciones de exposición severa.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -151,6 +171,10 @@
                         <p>
                             Diseño geotécnico (capacidad portante) y estructural (flexión/punzonamiento).
                         </p>
+                        <div class="module-details">
+                            <p>Dimensionamiento automático de zapatas aisladas concéntricas y excéntricas. Verificación de presiones sobre el terreno, corte por punzonamiento (acción en dos direcciones) y corte como viga ancha.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -165,6 +189,10 @@
                         <p>
                             Estabilidad al volcamiento y deslizamiento. Diseño del vástago, puntera y talón.
                         </p>
+                        <div class="module-details">
+                            <p>Análisis de estabilidad global (FS volcamiento y deslizamiento). Diseño estructural del muro de contención considerando empujes de tierras activos y pasivos (Rankine/Coulomb) y sobrecargas.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 
@@ -179,6 +207,10 @@
                         <p>
                             Método de Diseño Directo para sistemas de losas en dos direcciones.
                         </p>
+                        <div class="module-details">
+                            <p>Distribución de momentos en franjas de columna y centrales. Verificación de espesores mínimos para control de deflexiones sin vigas interiores. Ideal para sistemas de placa plana y losa con ábacos.</p>
+                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
+                        </div>
                     </div>
                 </div>
 

@@ -329,14 +329,102 @@ footer {
 /* Module Cards with Images */
 .module-card {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(15, 23, 42, 0.9);
     overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
 }
 
 .module-card:hover {
     transform: translateY(-5px);
     border-color: var(--concrete-grey);
+    z-index: 2;
+}
+
+/* Expanded State for Module Card */
+.module-card.expanded {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 90%;
+    max-width: 800px; /* Narrower to show background stack */
+    height: auto;
+    min-height: auto; /* Allow auto height */
+    z-index: 50;
+    transform: translateX(-50%) scale(1) !important;
+    border-color: var(--accent-gold);
+    background: var(--primary-blue);
+    cursor: default;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+.module-card.expanded .module-image-container {
+    height: 400px; /* Fixed height for image */
+    width: 100%;
+}
+
+.module-card.expanded .module-content {
+    background: var(--primary-blue);
+    position: relative;
+    z-index: 2;
+    padding-bottom: 3rem;
+}
+
+/* Hidden State for other cards (Spiral Stack Effect) */
+.module-card.hidden-stack {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 400px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 0;
+}
+
+/* Spiral Animation Classes (added by JS) */
+/* Dramatic fan-out spiral to ensure visibility behind card */
+.module-card.spiral-0 { transform: translate(-50%, -50%) rotate(0deg) scale(0.9); opacity: 0.5; }
+.module-card.spiral-1 { transform: translate(200px, -50%) rotate(15deg) scale(0.85); opacity: 0.6; }
+.module-card.spiral-2 { transform: translate(-400px, -50%) rotate(-15deg) scale(0.85); opacity: 0.6; }
+.module-card.spiral-3 { transform: translate(300px, -300px) rotate(30deg) scale(0.8); opacity: 0.5; }
+.module-card.spiral-4 { transform: translate(-500px, -300px) rotate(-30deg) scale(0.8); opacity: 0.5; }
+.module-card.spiral-5 { transform: translate(400px, 100px) rotate(45deg) scale(0.75); opacity: 0.4; }
+.module-card.spiral-6 { transform: translate(-600px, 100px) rotate(-45deg) scale(0.75); opacity: 0.4; }
+.module-card.spiral-7 { transform: translate(-50%, -90%) rotate(180deg) scale(0.7); opacity: 0.3; }
+
+.module-details {
+    display: none;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease 0.3s forwards;
+    opacity: 0;
+}
+
+.module-card.expanded .module-details {
+    display: block;
+    opacity: 1;
+}
+
+.close-module-btn {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.close-module-btn:hover {
+    background: var(--accent-gold);
+    color: var(--primary-blue);
 }
 
 .module-image-container {
