@@ -17,6 +17,11 @@ const ShowcreteConfig = {
         location: 'La Habana, Cuba CP 10400'
     },
 
+    // Formspree Configuration
+    formspree: {
+        endpoint: 'https://formspree.io/f/maqnvaqd'
+    },
+
     // Social media links
     social: {
         youtube: 'https://www.youtube.com/channel/UCfyVgRiQNVyGTPWhauZkiow'

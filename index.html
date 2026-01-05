@@ -11,11 +11,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Roboto+Mono:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Open+Sans:wght@300;400;700;800&family=Roboto+Mono:wght@300;400&display=swap"
         rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icon.png">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,7 +39,7 @@
 
         <div class="nav-links">
             <a href="index.html" class="nav-link" style="border-bottom: 2px solid var(--accent-gold);">Inicio</a>
-            <a href="informacion.html" class="nav-link">Filosofía</a>
+            <a href="informacion.html" class="nav-link">Información</a>
             <a href="descargas.html" class="nav-link">Descargas</a>
             <a href="faq.html" class="nav-link">FAQ</a>
             <a href="contacto.html" class="nav-link">Contacto</a>
@@ -49,12 +52,10 @@
         <section class="hero container visible">
             <div class="hero-content">
                 <span class="hero-tagline">ESTRUCTURA + FORMA</span>
-                <h1>Diseño <br>Ingenieril <br>Preciso.</h1>
+                <h1>Diseño Ingenieril Preciso.</h1>
                 <p style="margin-top: 2rem; opacity: 0.8; max-width: 500px;">
-                    La herramienta definitiva para el cálculo y diseño de elementos de hormigón armado.
-                    Normativa ACI y NC 207:2019.
-                </p>
-                <a href="descargas.html" class="hero-btn">Inicializar Sistema</a>
+                    Diseño de elementos estructurales de hormigón armado.
+                <a href="descargas.html" class="hero-btn">Descargar v11.0.4</a>
             </div>
         </section>
 
@@ -62,56 +63,144 @@
         <section id="about" class="container">
             <div class="grid-2">
                 <div>
-                    <h2>Fundamentos <br>Sólidos</h2>
+                    <h2>Potencia Estructural</h2>
                 </div>
                 <div>
                     <p style="font-size: 1.2rem; margin-bottom: 2rem;">
-                        Showcrete no es solo un software de cálculo; es una plataforma de concepción estructural.
-                        Entendemos que cada viga, cada columna y cada losa son parte de un organismo vivo que sostiene
-                        la visión arquitectónica.
+                        Showcrete permite realizar el diseño de elementos estructurales de hormigón armado con una
+                        idoneidad técnica absoluta. Resuelve la complejidad del cálculo estructural mediante una
+                        interfaz que privilegia la claridad y la precisión.
                     </p>
-                    <p class="feature-number">Normativa: ACI 318 / NC 207</p>
-                    <p class="feature-number">Integración: SAP2000 / ETABS / Revit</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Did you know? Section -->
+        <section id="did-you-know" class="container highlight-section">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <span class="hero-tagline glow-text">¿SABÍAS QUE...?</span>
+            </div>
+            <div class="grid-3">
+                <div class="feature-item highlight-item">
+                    <img src="assets/images/logo_frp.bmp" alt="FRP Logo" class="news-logo">
+                    <h3>Showcrete FRP</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Versión especializada para el diseño con polímeros de
+                        fibra (vidrio, basalto, carbono o aramida), eliminando problemas de corrosión.</p>
+                </div>
+                <div class="feature-item highlight-item">
+                    <img src="assets/images/aitec-logo.png" alt="aitec Logo" class="news-logo">
+                    <h3>Showcrete Cuba</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Edición adaptada a las regulaciones técnicas de Cuba,
+                        distribuida en alianza estratégica con aitec.</p>
+                </div>
+                <div class="feature-item highlight-item">
+                    <img src="assets/images/csi-caribe-logo.jpg" alt="CSI Caribe Logo" class="news-logo">
+                    <h3>Alianza CSI Caribe</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">
+                        Contamos con una alianza estratégica con CSI Caribe. Visita:
+                        <a href="https://www.csicaribe-bolivia.com/showcrete" target="_blank" style="color: var(--accent-gold); text-decoration: underline;">csicaribe-bolivia.com/showcrete</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- New Software Highlight: Showcrete FRP -->
+        <section class="container" style="margin-bottom: 8rem;">
+            <div class="highlight-item" style="padding: 4rem !important; background: rgba(251, 191, 36, 0.05); border: 1px solid var(--accent-gold);">
+                <div class="grid-2" style="align-items: center; gap: 4rem;">
+                    <div>
+                        <span class="hero-tagline" style="color: var(--accent-gold); font-weight: 800;">NUEVO LANZAMIENTO</span>
+                        <h2 style="margin: 1rem 0; font-size: 3.5rem;">Showcrete FRP</h2>
+                        <p style="font-size: 1.2rem; opacity: 0.9; line-height: 1.6;">
+                            Presentamos nuestra más reciente innovación: un software independiente y especializado para el diseño
+                            de estructuras reforzadas con polímeros de fibra (FRP).
+                        </p>
+                    </div>
+                    <div>
+                        <p style="opacity: 0.8; margin-bottom: 1.5rem;">
+                            Diseñado para responder a las tendencias modernas de construcción sostenible, Showcrete FRP permite
+                            el uso de materiales como vidrio, basalto, carbono o aramida, eliminando definitivamente el riesgo
+                            de corrosión en ambientes agresivos.
+                        </p>
+                        <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; margin-bottom: 2rem;">
+                            <li><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 10px;"></i> Cero Corrosión</li>
+                            <li><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 10px;"></i> Alta Durabilidad</li>
+                            <li><i class="fas fa-check" style="color: var(--accent-gold); margin-right: 10px;"></i> Materiales Compuestos</li>
+                        </ul>
+                        <a href="contacto.html?frp=1" class="hero-btn" style="padding: 0.8rem 2rem; font-size: 0.8rem;">
+                            Más Información <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Modules Grid -->
-        <section id="modules" class="container">
+        <section id="modules" class="container" style="margin-top: 4rem;">
             <span class="hero-tagline" style="margin-bottom: 3rem; display:block;">MÓDULOS DE ANÁLISIS</span>
             <div class="grid-2">
                 <div class="feature-item">
                     <span class="feature-number">01</span>
-                    <h3>Flexión Pura</h3>
-                    <p style="margin-top: 1rem; opacity: 0.7;">Análisis detallado de refuerzo longitudinal con
-                        generación automática de planos detallados.</p>
+                    <h3>Flexión</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Cálculo de elementos solicitaciones en losas a flexión pura.</p>
                 </div>
                 <div class="feature-item">
                     <span class="feature-number">02</span>
-                    <h3>Cortante</h3>
-                    <p style="margin-top: 1rem; opacity: 0.7;">Diseño de estribos y refuerzo transversal para garantizar
-                        la integridad ante fuerzas cortantes.</p>
+                    <h3>Flexocompresión</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Análisis de elementos bajo flexocompresión y flexotracción.</p>
                 </div>
                 <div class="feature-item">
                     <span class="feature-number">03</span>
-                    <h3>Cimientos</h3>
-                    <p style="margin-top: 1rem; opacity: 0.7;">Soluciones geotécnicas y estructurales para cimientos
-                        aislados y combinados.</p>
+                    <h3>Cortante</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Optimización del espaciado de cercos y refuerzo transversal.</p>
                 </div>
                 <div class="feature-item">
                     <span class="feature-number">04</span>
-                    <h3>Muros de Contención</h3>
-                    <p style="margin-top: 1rem; opacity: 0.7;">Estabilidad y diseño de armaduras para muros en voladizo.
-                    </p>
+                    <h3>Deformación</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Cálculo de flechas y control de deformaciones en vigas.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">05</span>
+                    <h3>Fisuración</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Control de abertura de fisuras y protección contra corrosión.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">06</span>
+                    <h3>Cimientos</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Diseño geotécnico y estructural de cimientos aislados.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">07</span>
+                    <h3>Muros</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Análisis de estabilidad y diseño de muros de contención.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">08</span>
+                    <h3>Losas (MDD)</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Cálculo de solicitudes por el Método de Diseño Directo.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">09</span>
+                    <h3>Pilotes</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Diseño integral de pilotes aislados y cimentaciones profundas.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">10</span>
+                    <h3>Cimientos Combinados</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Diseño geotécnico y estructural de cimientos combinados.</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-number">11</span>
+                    <h3>Depósitos</h3>
+                    <p style="margin-top: 1rem; opacity: 0.7;">Diseño estructural de registros y depósitos.</p>
                 </div>
             </div>
         </section>
 
         <!-- Downloads Call to Action -->
-        <section id="download" class="container" style="text-align: center; padding: 15rem 0;">
+        <section id="download" class="container" style="text-align: center; padding: 8rem 0;">
             <h2>Construye el Futuro</h2>
-            <br>
-            <a href="descargas.html" class="hero-btn">Descargar v2.0</a>
+            <a href="descargas.html" class="hero-btn">Descargar v11.0.4</a>
         </section>
 
         <!-- Video Gallery Section -->
@@ -155,10 +244,11 @@
     </main>
 
     <footer>
-        <div>&copy; 2024 Showcrete. Engineering by Design.</div>
+        <div>&copy; 2015-2026 Showcrete. Todos los derechos reservados.</div>
         <div style="opacity: 0.5;">La Habana, Cuba</div>
     </footer>
 
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 

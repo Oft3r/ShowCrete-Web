@@ -8,12 +8,16 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Roboto+Mono:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&family=Open+Sans:wght@300;400;700;800&family=Roboto+Mono:wght@300;400&display=swap"
         rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/icon.png">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,7 +39,7 @@
         <div class="nav-links">
             <a href="index.html" class="nav-link">Inicio</a>
             <a href="informacion.html" class="nav-link"
-                style="border-bottom: 2px solid var(--accent-gold);">Filosofía</a>
+                style="border-bottom: 2px solid var(--accent-gold);">Información</a>
             <a href="descargas.html" class="nav-link">Descargas</a>
             <a href="faq.html" class="nav-link">FAQ</a>
             <a href="contacto.html" class="nav-link">Contacto</a>
@@ -44,28 +48,45 @@
 
     <main>
         <!-- Page Header -->
-        <section class="container visible" style="padding-top: 15rem; padding-bottom: 5rem;">
+        <section class="container visible page-header">
             <span class="hero-tagline">ESPECIFICACIONES TÉCNICAS</span>
             <h1>Arquitectura<br>del Sistema</h1>
         </section>
 
         <!-- Overview -->
-        <section class="container" style="margin-bottom: 8rem;">
-            <div class="feature-item" style="border-left: 2px solid var(--accent-gold); padding-left: 2rem;">
-                <p style="font-size: 1.5rem; line-height: 1.4;">
-                    Showcrete permite realizar el diseño de elementos estructurales de hormigón armado con una idoneidad
-                    técnica absoluta.
-                    Resuelve la complejidad del cálculo estructural mediante una interfaz que privilegia la claridad y
-                    la precisión.
-                </p>
+        <section class="container" style="margin-bottom: 4rem;">
+            <div class="grid-2">
+                <div class="feature-item" style="border-left: 2px solid var(--accent-gold); padding-left: 2rem;">
+                    <p style="font-size: 1.5rem; line-height: 1.4;">
+                        Showcrete redefine la eficiencia en el diseño estructural, ofreciendo una experiencia intuitiva
+                        que elimina las barreras de aprendizaje complejas.
+                    </p>
+                </div>
+                <div>
+                    <p style="opacity: 0.8; margin-bottom: 1.5rem;">
+                        Nuestra plataforma ha sido diseñada bajo la premisa de la simplicidad funcional. No requiere de manuales
+                        extensos ni cursos especializados; cualquier profesional con conocimientos básicos de ingeniería estructural
+                        puede comenzar a producir resultados precisos y confiables desde el primer momento.
+                    </p>
+                    <p style="opacity: 0.8; margin-bottom: 1.5rem;">
+                        Permite diseñar vigas, columnas, tensores, muros, losas y cimentaciones de forma rápida y eficaz,
+                        garantizando diseños racionales que cumplen estrictamente con las normativas internacionales ACI.
+                    </p>
+                    <p style="opacity: 0.8;">
+                        Es un ecosistema que automatiza procesos críticos, desde el análisis de múltiples combinaciones de carga
+                        hasta la generación automática de planos detallados en formato DXF para AutoCAD, optimizando el flujo de
+                        trabajo del ingeniero moderno.
+                    </p>
+                </div>
             </div>
         </section>
+
 
         <!-- Modules Grid -->
         <section class="container">
             <h2 style="margin-bottom: 4rem;">Módulos de Análisis</h2>
 
-            <div id="modules-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; position: relative;">
+            <div class="modules-grid-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
 
                 <!-- Module 1 -->
                 <div class="module-card">
@@ -76,13 +97,9 @@
                         <span class="feature-number">MOD-01</span>
                         <h3>Elementos a Flexión</h3>
                         <p>
-                            Cálculo de área de acero a compresión y tracción. Basado en NC 207:2019 y ACI 318.
-                            Determina profundidad de línea neutra y dominios de deformación.
+                            Cálculo avanzado de refuerzo longitudinal para vigas y losas. Basado en normativas ACI 318 y NC 207:2019,
+                            determina con precisión la profundidad de la línea neutra y los dominios de deformación.
                         </p>
-                        <div class="module-details">
-                            <p>Este módulo permite un análisis exhaustivo de vigas y secciones rectangulares sometidas a flexión pura. Incluye verificación de cuantías mínimas y máximas, cálculo de deformación unitaria en el acero y concreto, y generación de reportes detallados paso a paso.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
@@ -95,13 +112,9 @@
                         <span class="feature-number">MOD-02</span>
                         <h3>Flexocompresión</h3>
                         <p>
-                            Análisis de interacción P-M. Generación de diagramas de interacción.
-                            Soporta efectos de esbeltez y análisis de segundo orden.
+                            Análisis integral de columnas y elementos sometidos a cargas axiales y momentos.
+                            Generación automática de diagramas de interacción P-M y consideración de efectos de esbeltez.
                         </p>
-                        <div class="module-details">
-                            <p>Genera diagramas de interacción 2D y 3D para columnas rectangulares y circulares. Considera efectos de esbeltez mediante el método de amplificación de momentos, permitiendo evaluar la estabilidad global de pórticos.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
@@ -114,13 +127,9 @@
                         <span class="feature-number">MOD-03</span>
                         <h3>Cortante</h3>
                         <p>
-                            Diseño de estribos por capacidad a cortante. Considera contribución del concreto Vc y acero
-                            Vs.
+                            Optimización del refuerzo transversal y espaciado de estribos. Evalúa la capacidad resistente
+                            del concreto y el acero para garantizar la seguridad ante esfuerzos cortantes.
                         </p>
-                        <div class="module-details">
-                            <p>Optimiza la distribución de estribos a lo largo del elemento. Permite definir zonas de confinamiento sísmico y calcula la resistencia al corte considerando la interacción con momento flector y fuerza axial.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
@@ -131,14 +140,11 @@
                     </div>
                     <div class="module-content">
                         <span class="feature-number">MOD-04</span>
-                        <h3>Deformaciones</h3>
+                        <h3>Control de Deflexiones</h3>
                         <p>
-                            Cálculo de deflexiones inmediatas y diferidas (fluencia/retracción). Control de fisuración.
+                            Predicción de flechas inmediatas y a largo plazo considerando efectos de fluencia y retracción.
+                            Asegura que los elementos cumplan con los límites de servicio estéticos y funcionales.
                         </p>
-                        <div class="module-details">
-                            <p>Calcula la inercia efectiva (Ie) según Branson o ACI 318-19. Estima deflexiones a largo plazo considerando coeficientes de fluencia y retracción del concreto, asegurando el cumplimiento de límites de servicio.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
@@ -149,14 +155,11 @@
                     </div>
                     <div class="module-content">
                         <span class="feature-number">MOD-05</span>
-                        <h3>Fisuración</h3>
+                        <h3>Control de Fisuración</h3>
                         <p>
-                            Estimación de ancho de fisura según modelos de Gergely-Lutz y Frosch.
+                            Análisis de abertura de grietas bajo condiciones de servicio. Utiliza modelos matemáticos
+                            reconocidos para garantizar la durabilidad y protección del refuerzo contra la corrosión.
                         </p>
-                        <div class="module-details">
-                            <p>Verifica el espaciamiento máximo de refuerzo para control de fisuración en vigas y losas. Implementa ecuaciones normativas para ambientes agresivos y condiciones de exposición severa.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
@@ -169,30 +172,24 @@
                         <span class="feature-number">MOD-06</span>
                         <h3>Cimientos Aislados</h3>
                         <p>
-                            Diseño geotécnico (capacidad portante) y estructural (flexión/punzonamiento).
+                            Diseño completo de zapatas considerando capacidad portante del suelo y resistencia estructural.
+                            Incluye verificaciones críticas de flexión, cortante y punzonamiento.
                         </p>
-                        <div class="module-details">
-                            <p>Dimensionamiento automático de zapatas aisladas concéntricas y excéntricas. Verificación de presiones sobre el terreno, corte por punzonamiento (acción en dos direcciones) y corte como viga ancha.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Module 7 -->
                 <div class="module-card">
                     <div class="module-image-container">
-                        <img src="assets/images/p07.jpg" alt="Muros en Voladizo" class="module-image">
+                        <img src="assets/images/p07.jpg" alt="Muros de Contención" class="module-image">
                     </div>
                     <div class="module-content">
                         <span class="feature-number">MOD-07</span>
-                        <h3>Muros en Voladizo</h3>
+                        <h3>Muros de Contención</h3>
                         <p>
-                            Estabilidad al volcamiento y deslizamiento. Diseño del vástago, puntera y talón.
+                            Análisis de estabilidad global frente a volcamiento y deslizamiento. Diseño detallado del
+                            vástago y la base para soportar empujes de tierra y sobrecargas.
                         </p>
-                        <div class="module-details">
-                            <p>Análisis de estabilidad global (FS volcamiento y deslizamiento). Diseño estructural del muro de contención considerando empujes de tierras activos y pasivos (Rankine/Coulomb) y sobrecargas.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
                     </div>
                 </div>
 
@@ -203,43 +200,91 @@
                     </div>
                     <div class="module-content">
                         <span class="feature-number">MOD-08</span>
-                        <h3>Losas (MDD)</h3>
+                        <h3>Losas en Dos Direcciones</h3>
                         <p>
-                            Método de Diseño Directo para sistemas de losas en dos direcciones.
+                            Implementación del Método de Diseño Directo (MDD) para la distribución de momentos en sistemas
+                            de losas, optimizando el refuerzo en franjas de columna y centrales.
                         </p>
-                        <div class="module-details">
-                            <p>Distribución de momentos en franjas de columna y centrales. Verificación de espesores mínimos para control de deflexiones sin vigas interiores. Ideal para sistemas de placa plana y losa con ábacos.</p>
-                            <button class="close-module-btn"><i class="fas fa-times"></i> Cerrar</button>
-                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 9 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p09.jpg" alt="Pilotes Aislados" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-09</span>
+                        <h3>Pilotes Aislados</h3>
+                        <p>
+                            Diseño integral de pilotes y cabezales. Análisis de capacidad de carga,
+                            asentamientos y transferencia de esfuerzos en cimentaciones profundas.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 10 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p10.jpg" alt="Cimientos Combinados" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-10</span>
+                        <h3>Cimientos Combinados</h3>
+                        <p>
+                            Solución para columnas próximas o linderos. Optimización de presiones sobre el terreno
+                            y diseño estructural de vigas de cimentación y losas combinadas.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Module 11 -->
+                <div class="module-card">
+                    <div class="module-image-container">
+                        <img src="assets/images/p11.jpg" alt="Registros y Depósitos" class="module-image">
+                    </div>
+                    <div class="module-content">
+                        <span class="feature-number">MOD-11</span>
+                        <h3>Registros y Depósitos</h3>
+                        <p>
+                            Diseño especializado de estructuras de almacenamiento de líquidos.
+                            Control estricto de estanqueidad y durabilidad bajo condiciones de servicio.
+                        </p>
                     </div>
                 </div>
 
             </div>
         </section>
 
+
         <!-- Integration Section -->
-        <section class="container" style="margin-top: 8rem;">
+        <section class="container" style="margin-top: 8rem; margin-bottom: 8rem;">
             <div class="grid-2">
                 <div>
                     <span class="hero-tagline">INTEROPERABILIDAD</span>
-                    <h2>Ecosistema<br>BIM</h2>
+                    <h2>Conectividad<br>CSI API</h2>
+                    <p style="margin-top: 2rem; opacity: 0.7;">
+                        La integración con SAP2000 y ETABS es directa y transparente. Sin configuraciones tediosas,
+                        permite importar automáticamente reacciones de apoyo para cualquier estado de carga,
+                        manteniendo nuestra filosofía de herramientas potentes pero accesibles.
+                    </p>
                 </div>
                 <div>
                     <ul style="list-style: none; font-family: var(--font-mono); opacity: 0.8;">
                         <li
-                            style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                            style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
                             <span style="color: var(--accent-gold); margin-right: 1rem;">>>></span>
-                            Importación desde SAP2000 / ETABS (API CSI)
+                            <strong>Sincronización Directa:</strong> Importación de reacciones desde modelos SAP2000/ETABS.
                         </li>
                         <li
-                            style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                            style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
                             <span style="color: var(--accent-gold); margin-right: 1rem;">>>></span>
-                            Exportación a Autodesk Revit (Familias Parametrizadas)
+                            <strong>Automatización DXF:</strong> Generación de planos de cimentación y pilotes listos para AutoCAD.
                         </li>
                         <li
-                            style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                            style="margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
                             <span style="color: var(--accent-gold); margin-right: 1rem;">>>></span>
-                            Generación de planos DXF (AutoCAD)
+                            <strong>Informes Detallados:</strong> Memoria de cálculo para cada elemento diseñado.
                         </li>
                     </ul>
                 </div>
@@ -248,11 +293,22 @@
 
     </main>
 
+    <!-- Module Modal Overlay -->
+    <div class="module-overlay" id="module-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-body">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </div>
+
     <footer style="margin-top: 5rem;">
-        <div>&copy; 2024 Showcrete. Engineering by Design.</div>
+        <div>&copy; 2015-2026 Showcrete. Todos los derechos reservados.</div>
         <div style="opacity: 0.5;">La Habana, Cuba</div>
     </footer>
 
+    <script src="assets/js/config.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 

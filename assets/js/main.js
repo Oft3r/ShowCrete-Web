@@ -231,6 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactMessage) {
         const urlParams = new URLSearchParams(window.location.search);
         const quote = urlParams.get('quote');
+        const frp = urlParams.get('frp');
         if (quote) {
             contactMessage.value = decodeURIComponent(quote);
             contactMessage.readOnly = true; // Prevent editing to avoid fraud
@@ -239,112 +240,543 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Optional: Scroll to form
             contactMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (frp) {
+            contactMessage.value = "Solicito información acerca del nuevo producto Showcrete FRP para el cálculo de refuerzo con polímeros de fibra.";
+            // Do not make it read-only, allow editing
+
+            // Optional: Scroll to form
+            contactMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 
-    // 7. Interactive Module Grid Animation & Mobile Modal
-    const modulesGrid = document.getElementById('modules-grid');
-    if (modulesGrid) {
-        // Create Mobile Modal Container if it doesn't exist
-        let mobileModal = document.getElementById('mobile-module-modal');
-        if (!mobileModal) {
-            mobileModal = document.createElement('div');
-            mobileModal.id = 'mobile-module-modal';
-            mobileModal.innerHTML = `
-                <div class="mobile-modal-content">
-                    <div class="mobile-modal-body"></div>
-                </div>
-            `;
-            document.body.appendChild(mobileModal);
-            
-            // Event delegation for close button since it's re-created
-            mobileModal.addEventListener('click', (e) => {
-                if (e.target.closest('.mobile-modal-close')) {
-                    mobileModal.classList.remove('active');
-                    document.body.style.overflow = ''; // Restore scrolling
+    // 6.5 Contact Form Submission (Formspree Integration)
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
+
+            // Get form data
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            // Check if Formspree is configured
+            if (typeof ShowcreteConfig === 'undefined' || ShowcreteConfig.formspree.endpoint.includes('YOUR_FORM_ID')) {
+                // Fallback to mailto if not configured yet
+                const recipient = "jdelsol.cu@gmail.com";
+                const subject = `Consulta Web: ${name}`;
+                const body = `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`;
+                const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoLink;
+                alert("Configuración de Formspree pendiente. Se abrirá su cliente de correo.");
+                return;
+            }
+
+            // Visual feedback: Loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Enviando...";
+            submitBtn.style.opacity = "0.5";
+
+            // Prepare data for Formspree
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('message', message);
+            formData.append('_subject', `Consulta Web: ${name}`);
+
+            // Send via Fetch API
+            fetch(ShowcreteConfig.formspree.endpoint, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
                 }
-            });
-        }
-
-        const moduleCards = modulesGrid.querySelectorAll('.module-card');
-
-        moduleCards.forEach((card, index) => {
-            card.addEventListener('click', (e) => {
-                const isMobile = window.innerWidth <= 768;
-
-                if (isMobile) {
-                    // --- MOBILE LOGIC (Portal Modal) ---
-                    // Clone content to the separate modal to avoid stacking context issues
-                    const modalBody = mobileModal.querySelector('.mobile-modal-body');
-                    const imageSrc = card.querySelector('img').src;
-                    const title = card.querySelector('h3').textContent;
-                    const number = card.querySelector('.feature-number').textContent;
-                    const desc = card.querySelector('p').textContent;
-                    const details = card.querySelector('.module-details p').textContent;
-
-                    modalBody.innerHTML = `
-                        <div class="mobile-modal-image-container">
-                            <img src="${imageSrc}" alt="${title}">
-                        </div>
-                        <span class="feature-number" style="color: var(--accent-gold); display:block; margin-top:1rem;">${number}</span>
-                        <h3 style="font-size: 1.8rem; margin: 0.5rem 0;">${title}</h3>
-                        <p style="opacity: 0.8; margin-bottom: 1rem;">${desc}</p>
-                        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem; margin-top: 1rem;">
-                            <p>${details}</p>
-                        </div>
-                        <button class="mobile-modal-close"><i class="fas fa-times"></i> Cerrar</button>
-                    `;
-
-                    mobileModal.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // Lock body scroll
-                    
+            }).then(response => {
+                if (response.ok) {
+                    // Success
+                    alert("¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.");
+                    contactForm.reset();
                 } else {
-                    // --- DESKTOP LOGIC (Original Expansion) ---
-                    
-                    // Prevent triggering if clicking close button
-                    if (e.target.closest('.close-module-btn')) return;
-
-                    // If already expanded, do nothing (close button handles reset)
-                    if (card.classList.contains('expanded')) return;
-
-                    modulesGrid.style.height = `${modulesGrid.offsetHeight}px`;
-                    modulesGrid.style.minHeight = '600px';
-
-                    card.classList.add('expanded');
-                    modulesGrid.classList.add('expanded-active');
-
-                    // Animate other cards into a spiral stack behind
-                    let spiralIndex = 0;
-                    moduleCards.forEach((otherCard) => {
-                        if (otherCard !== card) {
-                            otherCard.classList.add('hidden-stack');
-                            otherCard.classList.remove('spiral-0', 'spiral-1', 'spiral-2', 'spiral-3', 'spiral-4', 'spiral-5', 'spiral-6', 'spiral-7');
-                            otherCard.classList.add(`spiral-${spiralIndex % 8}`);
-                            spiralIndex++;
+                    // Error from server
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                            alert(data["errors"].map(error => error["message"]).join(", "));
+                        } else {
+                            alert("Hubo un error al enviar el mensaje.");
                         }
                     });
                 }
+            }).catch(error => {
+                // Network error
+                console.error("Formspree Error:", error);
+                alert("Hubo un error de conexión. Por favor, inténtelo de nuevo.");
+            }).finally(() => {
+                // Restore button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                submitBtn.style.opacity = "1";
+            });
+        });
+    }
+
+    // 7. Module Modal Logic (Informacion Page)
+    const moduleCards = document.querySelectorAll('.module-card');
+    const modal = document.getElementById('module-modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeModal = document.querySelector('.close-modal');
+
+    if (moduleCards.length > 0 && modal) {
+        moduleCards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('h3').textContent;
+                const number = card.querySelector('.feature-number').textContent;
+                const description = card.querySelector('p').textContent;
+                const imgSrc = card.querySelector('img').src;
+
+                // Circular Animation Effect
+                moduleCards.forEach((c, i) => {
+                    if (c !== card) {
+                        const angle = (i / moduleCards.length) * Math.PI * 2;
+                        const radius = 500;
+                        const tx = Math.cos(angle) * radius;
+                        const ty = Math.sin(angle) * radius;
+                        const tr = (i / moduleCards.length) * 360;
+                        
+                        c.style.setProperty('--tx', `${tx}px`);
+                        c.style.setProperty('--ty', `${ty}px`);
+                        c.style.setProperty('--tr', `${tr}deg`);
+                        c.classList.add('animating-out');
+                    }
+                });
+
+                // Inject Content into Modal
+                let modalContent = '';
+                if (number === 'MOD-01') {
+                    // Special content for Module 1
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery">
+                                <img src="${imgSrc}" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En esta sección, el programa calcula el área de acero necesaria para compresión y tracción en una sección específica del elemento analizado. Para ello, debe definirse el momento flector de diseño, las dimensiones de la sección y las características de los materiales utilizados.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El cálculo se basa en la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. La profundidad de la línea neutra y el dominio de trabajo mostrados corresponden a las áreas de acero calculadas.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En el menú contextual (clic derecho) se pueden modificar las unidades de medida y configurar criterios de cuantía mínima basados en normas específicas. Los resultados incluyen áreas de acero calculadas para zonas comprimidas y traccionadas, áreas reales según diámetro y cantidad de barras, además de datos adicionales del proceso de cálculo.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Cálculo preciso de áreas de acero</li>
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de línea neutra y dominios de trabajo</li>
+                                        <li style="margin-bottom: 0.5rem;">> Configuración flexible de unidades y criterios</li>
+                                        <li style="margin-bottom: 0.5rem;">> Reportes detallados con datos de cálculo</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-02') {
+                    // Special content for Module 2
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery">
+                                <img src="${imgSrc}" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En esta sección, la aplicación calcula el área de acero necesaria para compresión y tracción en una sección específica del elemento analizado. Para ello, debe definirse el momento flector y la carga axial de diseño, además de las dimensiones y características de los materiales utilizados.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Se define si las solicitaciones actuantes (momento flector y fuerza axial) fueron obtenidas de un análisis lineal o no lineal (de segundo orden), considerando el efecto de pérdida de estabilidad. Para análisis lineal, se requiere introducir la longitud de pandeo (lp = k × l). El programa utiliza el método simplificado para esbeltez, permitiendo cálculo cuando la esbeltez geométrica es ≤ 29.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Se permite analizar hasta 999 combinaciones de cargas simultáneamente. El cálculo sigue la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. La profundidad de la línea neutra y dominio de trabajo corresponden al área de acero calculada.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Los resultados muestran áreas de acero calculadas para zonas comprimidas y traccionadas (diseño simétrico), áreas reales según diámetro y cantidad de barras, además de otros datos relevantes. Este módulo permite generar planos en formato DXF para AutoCAD y exportar dimensionamiento hacia Revit.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de flexocompresión con efectos de esbeltez</li>
+                                        <li style="margin-bottom: 0.5rem;">> Procesamiento de múltiples combinaciones de carga</li>
+                                        <li style="margin-bottom: 0.5rem;">> Diseño simétrico de refuerzo</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a AutoCAD y Revit</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-03') {
+                    // Special content for Module 3
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery">
+                                <img src="${imgSrc}" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En esta sección, el programa calcula el espaciamiento de los estribos para una sección específica del elemento analizado, ya sea para elementos no sometidos a cargas axiales (ej: vigas) como para elementos sometidos a fuerza axial de compresión o tracción (ej: columnas o tensores). Se deberá definir previamente el cortante de diseño, las dimensiones, características de los materiales, diámetro de las barras de estribos y cantidad de patas.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Los resultados muestran el espaciamiento calculado, el espaciamiento mínimo requerido y otros datos de interés. El espaciamiento calculado corresponde a estribos perpendiculares al eje del elemento.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El programa se basa en la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. El espaciamiento calculado corresponde a estribos perpendiculares al eje del elemento.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Cálculo de espaciamiento de estribos</li>
+                                        <li style="margin-bottom: 0.5rem;">> Análisis para vigas, columnas y tensores</li>
+                                        <li style="margin-bottom: 0.5rem;">> Configuración de diámetros y patas de estribos</li>
+                                        <li style="margin-bottom: 0.5rem;">> Verificación de espaciamientos mínimos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-04') {
+                    // Special content for Module 4
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p15.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En esta sección, la aplicación calcula las flechas instantáneas y diferidas a lo largo del tiempo para elementos que trabajan a flexión sometidos a cargas uniformemente distribuidas. Se deberán definir previamente los momentos flectores asociados a las cargas de corta y larga duración en la sección crítica según las condiciones de apoyo del elemento, las dimensiones de la sección y las características de los materiales utilizados.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En el cálculo de la flecha total se tienen en cuenta los efectos de la fluencia del concreto, la relajación del acero en el tiempo, la pérdida de rigidez en la sección transversal producto de la fisuración, el envejecimiento de los materiales y el aporte del acero a la rigidez de la sección transversal.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El programa se basa en el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. Los momentos introducidos deberán estar asociados a cargas uniformemente distribuidas. Este módulo permite exportar hacia Revit el dimensionamiento del elemento analizado.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Cálculo de flechas instantáneas y diferidas</li>
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de fluencia y relajación</li>
+                                        <li style="margin-bottom: 0.5rem;">> Consideración de fisuración y envejecimiento</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a Revit</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-05') {
+                    // Special content for Module 5
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p16.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Se proponen dos modelos para el cálculo de abertura de fisuras: el modelo de Frosch y el modelo de Gergely-Lutz. Los autores recomiendan el uso de la expresión de Frosch para el cálculo de la abertura de fisuras. El método de Gergely-Lutz no es aplicable a losas armadas en dos direcciones.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El programa se basa en la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. Las aberturas de fisuras permisibles se toman de la norma cubana NC 250:2005.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Modelos Frosch y Gergely-Lutz</li>
+                                        <li style="margin-bottom: 0.5rem;">> Cálculo de abertura de fisuras</li>
+                                        <li style="margin-bottom: 0.5rem;">> Verificación de límites permisibles</li>
+                                        <li style="margin-bottom: 0.5rem;">> Aplicación a diferentes tipos de elementos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-06') {
+                    // Special content for Module 6
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p17.jpg" alt="${title}">
+                                <img src="assets/images/p18.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Este módulo calcula el dimensionamiento geotécnico y estructural de cimientos aislados. Permite analizar diferentes tipos de cimentación (centrada, excéntrica o de esquina) considerando parámetros del suelo mediante métodos como Brinch-Hansen o Meyerhof.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Incluye integración con SAP2000 y ETABS para importar reacciones de apoyo, análisis simultáneo de hasta 9999 combinaciones de carga, y verificación de criterios como capacidad de carga, vuelco, deslizamiento, punzonamiento, cortante y flexión.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El programa se basa en la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. Genera planos en formato DXF para AutoCAD y exporta dimensionamiento hacia Revit.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Análisis geotécnico y estructural</li>
+                                        <li style="margin-bottom: 0.5rem;">> Integración con SAP2000 y ETABS</li>
+                                        <li style="margin-bottom: 0.5rem;">> Procesamiento masivo de combinaciones</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a AutoCAD y Revit</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-07') {
+                    // Special content for Module 7
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p12.jpg" alt="${title}">
+                                <img src="assets/images/p19.jpg" alt="${title}">
+                                <img src="assets/images/p20.jpg" alt="${title}">
+                                <img src="assets/images/p21.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Este módulo verifica la estabilidad de muros de contención mediante análisis de vuelco, deslizamiento y capacidad de carga. Realiza predimensionamiento geométrico basado en criterios de Braja M. Das y José Calavera Ruiz, y diseño estructural según NC 207:2019 y ACI 318.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Calcula empujes laterales usando teoría de Rankine (activos y pasivos), considera sobrecargas (línea, uniforme, banda) y efectos sísmicos. Incluye análisis de nivel freático y visualización de diagramas de solicitaciones.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Incorpora plugins para SAP2000 y ETABS permitiendo modelado bidireccial. Genera planos en formato DXF para AutoCAD y exporta dimensionamiento hacia Revit, con verificación automática de requisitos constructivos y de detallado.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de estabilidad completo</li>
+                                        <li style="margin-bottom: 0.5rem;">> Cálculo de empujes sísmicos</li>
+                                        <li style="margin-bottom: 0.5rem;">> Integración SAP2000/ETABS</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a AutoCAD y Revit</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-08') {
+                    // Special content for Module 8
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p23.jpg" alt="${title}">
+                                <img src="assets/images/p24.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El Método de Diseño Directo (MDD) es un método semiempírico para calcular solicitaciones en losas que trabajan en dos direcciones. Distribuye el momento estático entre franjas de columna e intermedias mediante coeficientes basados en ensayos con cargas gravitacionales uniformes.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Uno de los dos métodos del ACI 318 para análisis de carga gravitacional en sistemas de losas bidireccionales. Aplicable a pórticos ortogonales con cargas gravitacionales únicamente, incluyendo losas con vigas, losas planas y placas planas. El software verifica automáticamente las limitaciones del método.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El predimensionamiento del peralto se basa en criterios de deformación del ACI 318 y el libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. Considera efectos de rigidez por agrietamiento y geometría de apoyos.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Método de Diseño Directo (MDD)</li>
+                                        <li style="margin-bottom: 0.5rem;">> Distribución de momentos</li>
+                                        <li style="margin-bottom: 0.5rem;">> Verificación automática de límites</li>
+                                        <li style="margin-bottom: 0.5rem;">> Predimensionamiento por deformación</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-09') {
+                    // Special content for Module 9
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p28.jpg" alt="${title}">
+                                <img src="assets/images/p29.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Este módulo calcula el dimensionamiento integral geotécnico y estructural de pilotes aislados para cimentaciones profundas. A diferencia de cimientos superficiales, permite analizar múltiples estratos de suelo considerando variaciones en propiedades geotécnicas a diferentes profundidades.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Ofrece cálculo mediante múltiples métodos de capacidad portante, permitiendo al usuario seleccionar métodos específicos o dejar que el programa calcule por todos los métodos disponibles. El usuario puede configurar el programa para seleccionar automáticamente el resultado más conservador, menos conservador o el promedio de todos los métodos calculados.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Incluye integración con SAP2000 y ETABS para importar reacciones de apoyo, análisis simultáneo de hasta 9999 combinaciones de carga, y verificación de criterios como capacidad portante, cortante y flexión. El programa se basa en la norma cubana NC 207:2019 y el código ACI 318. Genera planos en formato DXF para AutoCAD y exporta dimensionamiento hacia Revit.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de múltiples estratos</li>
+                                        <li style="margin-bottom: 0.5rem;">> Múltiples métodos de cálculo</li>
+                                        <li style="margin-bottom: 0.5rem;">> Integración con SAP2000 y ETABS</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a AutoCAD y Revit</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-10') {
+                    // Special content for Module 10
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p25.jpg" alt="${title}">
+                                <img src="assets/images/p26.jpg" alt="${title}">
+                                <img src="assets/images/p27.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Este módulo calcula el dimensionamiento geotécnico y estructural de cimientos combinados que soportan dos pedestales. Analiza diferentes configuraciones de cimentación combinada considerando parámetros del suelo mediante métodos como Brinch-Hansen o Meyerhof, optimizando el diseño para cargas excéntricas y momentos.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Permite análisis simultáneo de hasta 9999 combinaciones de carga y verificación de criterios como capacidad de carga, vuelco, deslizamiento, punzonamiento, cortante y flexión en la placa de cimentación.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El programa se basa en la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. Genera planos en formato DXF para AutoCAD y exporta dimensionamiento hacia Revit.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Diseño de cimientos combinados</li>
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de dos pedestales</li>
+                                        <li style="margin-bottom: 0.5rem;">> Procesamiento masivo de combinaciones</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a AutoCAD y Revit</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (number === 'MOD-11') {
+                    // Special content for Module 11
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="assets/images/p30.jpg" alt="${title}">
+                                <img src="assets/images/p31.jpg" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    Este módulo calcula el dimensionamiento geotécnico y estructural de depósitos, cisternas, fosas sépticas y registros. Permite agregar paredes o tabiques interiores con pases y aberturas en paredes y tapas, útiles para registros eléctricos o sanitarios.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    En el diseño geotécnico calcula capacidad de carga, asentamientos y verifica flotabilidad en caso de inmersión en agua o suelo saturado por nivel freático. Permite analizar múltiples estratos de suelo considerando variaciones en propiedades geotécnicas a diferentes profundidades.
+                                </p>
+                                <p style="font-size: 0.95rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    El programa se basa en la norma cubana NC 207:2019 y el código ACI 318, con referencias al libro "Hormigón Estructural. Diseño por Estados Límites" de J.A. Hernández Caneiro y J.J. Hernández Santana. Genera planos en formato DXF para AutoCAD.
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Diseño de depósitos y registros</li>
+                                        <li style="margin-bottom: 0.5rem;">> Análisis de múltiples estratos</li>
+                                        <li style="margin-bottom: 0.5rem;">> Verificación de flotabilidad</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación a AutoCAD</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Default content for other modules
+                    modalContent = `
+                        <div class="modal-grid">
+                            <div class="modal-image-gallery">
+                                <img src="${imgSrc}" alt="${title}">
+                                <img src="${imgSrc}" alt="${title}">
+                            </div>
+                            <div>
+                                <span class="feature-number" style="color: var(--accent-gold);">${number}</span>
+                                <h2 style="margin: 1rem 0; font-size: 3rem;">${title}</h2>
+                                <p style="font-size: 1.2rem; line-height: 1.6; opacity: 0.8; margin-bottom: 2rem;">
+                                    ${description}
+                                </p>
+                                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                                    <h4 style="color: var(--accent-gold); margin-bottom: 1rem;">Capacidades Detalladas</h4>
+                                    <ul style="list-style: none; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7;">
+                                        <li style="margin-bottom: 0.5rem;">> Verificación de estados límite de servicio</li>
+                                        <li style="margin-bottom: 0.5rem;">> Optimización automática de cuantías</li>
+                                        <li style="margin-bottom: 0.5rem;">> Generación de reportes detallados</li>
+                                        <li style="margin-bottom: 0.5rem;">> Exportación directa a DXF</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                modalBody.innerHTML = modalContent;
+
+                // Show Modal
+                modal.style.display = 'flex';
+                // Force reflow
+                modal.offsetHeight;
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scroll
+            });
+        });
+
+        const closeFunc = () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Show background cards immediately when closing starts
+            moduleCards.forEach(c => {
+                c.classList.remove('animating-out');
             });
 
-            // Close Button Logic (Desktop Only)
-            const closeBtn = card.querySelector('.close-module-btn');
-            if (closeBtn) {
-                closeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent card click event
-                    
-                    // Reset this card
-                    card.classList.remove('expanded');
-                    modulesGrid.classList.remove('expanded-active');
-                    
-                    modulesGrid.style.height = '';
-                    modulesGrid.style.minHeight = '';
+            // Wait for animation to finish before hiding display
+            setTimeout(() => {
+                if (!modal.classList.contains('active')) {
+                    modal.style.display = 'none';
+                }
+            }, 600);
+        };
 
-                    // Reset all other cards
-                    moduleCards.forEach(otherCard => {
-                        otherCard.classList.remove('hidden-stack');
-                        otherCard.classList.remove('spiral-0', 'spiral-1', 'spiral-2', 'spiral-3', 'spiral-4', 'spiral-5', 'spiral-6', 'spiral-7');
-                    });
-                });
+        closeModal.addEventListener('click', closeFunc);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeFunc();
+        });
+
+        // Close with ESC key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeFunc();
             }
         });
     }
