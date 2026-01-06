@@ -17,9 +17,9 @@ const ShowcreteConfig = {
         location: 'La Habana, Cuba CP 10400'
     },
 
-    // Formspree Configuration
+    // Google Apps Script Configuration
     formspree: {
-        endpoint: 'https://formspree.io/f/maqnvaqd'
+        endpoint: 'https://script.google.com/macros/s/AKfycbwDlQLtdxQiR7mZqH29ud0gI4EHDSO44Gr9BolTOjowiqfiRYoayfFotwGaXLw5WmgH/exec'
     },
 
     // Social media links
@@ -44,9 +44,9 @@ const ShowcreteConfig = {
     // Download links
     downloads: {
         current: {
-            version: '10.1.0',
-            date: 'Marzo 2021',
-            url: 'https://bit.ly/31xffqv'
+            version: '11.0.4',
+            date: 'Enero 2026',
+            url: 'https://dl.dropboxusercontent.com/scl/fi/npjmvl0p216ep6pi5g9lv/ShowCrete_v11.0.4_INT_CSI.rar?rlkey=ly91a8nlmvy34okg2hf644gb2&st=d6vvgixc&dl'
         }
     },
 

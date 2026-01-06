@@ -1,6 +1,6 @@
 /* Minimalist Architectural Theme for Showcrete */
 :root {
-    --primary-blue: #0f172a;
+    --primary-blue: #0f1c35;
     /* Deep Architectural Blue */
     --concrete-grey: #e2e8f0;
     /* Light Concrete */
@@ -119,7 +119,7 @@ h3 {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    background-color: #0f172a;
+    background-color: var(--primary-blue);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--white);
@@ -445,12 +445,11 @@ footer {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: grayscale(100%) contrast(1.2);
-    transition: filter 0.5s ease, transform 0.5s ease;
+    filter: none;
+    transition: transform 0.5s ease;
 }
 
 .module-card:hover .module-image {
-    filter: grayscale(0%) contrast(1);
     transform: scale(1.05);
 }
 
@@ -503,7 +502,7 @@ footer {
 
     .navbar {
         padding: 0.5rem 20px;
-        background-color: #0f172a;
+        background-color: var(--primary-blue);
     }
 
     /* Mobile Navigation */
@@ -517,7 +516,7 @@ footer {
         right: -100%;
         width: 75%;
         height: 100vh;
-        background-color: rgb(15, 23, 42);
+        background-color: var(--primary-blue);
         /* Solid color, no transparency */
         backdrop-filter: none;
         /* Remove filter to ensure solidity */
@@ -909,6 +908,127 @@ footer {
     }
 }
 
+/* Custom Notification Styles */
+.custom-notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    min-width: 320px;
+    max-width: 450px;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    animation: slideInRight 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+.custom-notification.hiding {
+    animation: slideOutRight 0.5s forwards ease-in;
+}
+
+.notification-content {
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    position: relative;
+}
+
+.custom-notification.success {
+    border-left: 4px solid #10b981;
+}
+
+.custom-notification.error {
+    border-left: 4px solid #ef4444;
+}
+
+.custom-notification i {
+    font-size: 1.5rem;
+    margin-top: 0.2rem;
+}
+
+.custom-notification.success i { color: #10b981; }
+.custom-notification.error i { color: #ef4444; }
+
+.notification-text {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+    font-family: var(--font-main);
+}
+
+.notification-message {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-family: var(--font-main);
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    line-height: 1;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+.notification-progress {
+    height: 3px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.notification-progress::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: currentColor;
+    animation: progress 5s linear forwards;
+}
+
+.custom-notification.success .notification-progress::after { background: #10b981; }
+.custom-notification.error .notification-progress::after { background: #ef4444; }
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes progress {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+@media (max-width: 480px) {
+    .custom-notification {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        min-width: auto;
+    }
+}
+
 .modal-image-gallery {
     display: grid;
     grid-template-columns: 1fr;
@@ -919,6 +1039,7 @@ footer {
     width: 100%;
     height: auto;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    filter: none;
 }
 
 .module-card {

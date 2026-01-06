@@ -263,15 +263,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('contact-email').value;
             const message = document.getElementById('contact-message').value;
 
-            // Check if Formspree is configured
-            if (typeof ShowcreteConfig === 'undefined' || ShowcreteConfig.formspree.endpoint.includes('YOUR_FORM_ID')) {
+            // Check if Backend is configured
+            if (typeof ShowcreteConfig === 'undefined' || ShowcreteConfig.formspree.endpoint.includes('YOUR_FORM_ID') || ShowcreteConfig.formspree.endpoint === '') {
                 // Fallback to mailto if not configured yet
                 const recipient = "jdelsol.cu@gmail.com";
                 const subject = `Consulta Web: ${name}`;
                 const body = `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`;
                 const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 window.location.href = mailtoLink;
-                alert("Configuración de Formspree pendiente. Se abrirá su cliente de correo.");
+                alert("Configuración de envío pendiente. Se abrirá su cliente de correo.");
                 return;
             }
 
@@ -280,39 +280,29 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = "Enviando...";
             submitBtn.style.opacity = "0.5";
 
-            // Prepare data for Formspree
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('email', email);
-            formData.append('message', message);
-            formData.append('_subject', `Consulta Web: ${name}`);
+            // Prepare data for Google Apps Script (URLSearchParams is more reliable for GAS)
+            const params = new URLSearchParams();
+            params.append('name', name);
+            params.append('email', email);
+            params.append('message', message);
+            params.append('_subject', `Consulta Web: ${name}`);
 
             // Send via Fetch API
             fetch(ShowcreteConfig.formspree.endpoint, {
                 method: 'POST',
-                body: formData,
+                body: params,
+                mode: 'no-cors', // Try no-cors to bypass strict CORS if testing locally
                 headers: {
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             }).then(response => {
-                if (response.ok) {
-                    // Success
-                    alert("¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.");
-                    contactForm.reset();
-                } else {
-                    // Error from server
-                    response.json().then(data => {
-                        if (Object.hasOwn(data, 'errors')) {
-                            alert(data["errors"].map(error => error["message"]).join(", "));
-                        } else {
-                            alert("Hubo un error al enviar el mensaje.");
-                        }
-                    });
-                }
+                // Custom Notification
+                showNotification("¡Mensaje enviado con éxito!", "Nos pondremos en contacto pronto para atender su consulta técnica.", "success");
+                contactForm.reset();
             }).catch(error => {
                 // Network error
-                console.error("Formspree Error:", error);
-                alert("Hubo un error de conexión. Por favor, inténtelo de nuevo.");
+                console.error("Detailed Error:", error);
+                showNotification("Error al enviar", "Por favor, verifique su conexión o intente más tarde.", "error");
             }).finally(() => {
                 // Restore button state
                 submitBtn.disabled = false;
@@ -781,4 +771,89 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 8. Geolocation Download Link (On Click)
+    const downloadBtn = document.getElementById('btn-download');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const btn = this;
+
+            // Links (Swapped as requested: NAC for Cuba, INT for International)
+            const cubaHref = "https://dl.dropboxusercontent.com/scl/fi/l2em4gn4hfq1kainbvvdq/ShowCrete_v11.0.4_NAC_AICROS.rar?rlkey=2utul7l9uaiofz4cfsoio7hcu&st=b03yqf13";
+            const internationalHref = "https://dl.dropboxusercontent.com/scl/fi/npjmvl0p216ep6pi5g9lv/ShowCrete_v11.0.4_INT_CSI.rar?rlkey=ly91a8nlmvy34okg2hf644gb2&st=d6vvgixc";
+
+            // Visual feedback
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i> Verificando...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+
+            fetch('https://ipapi.co/json/')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network error');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.country_code === 'CU') {
+                        window.open(cubaHref, '_blank');
+                    } else {
+                        window.open(internationalHref, '_blank');
+                    }
+                })
+                .catch(error => {
+                    console.warn("Error de geolocalización, usando link internacional por defecto:", error);
+                    window.open(internationalHref, '_blank');
+                })
+                .finally(() => {
+                    // Restore button state
+                    btn.innerHTML = originalContent;
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                });
+        });
+    }
+
 });
+
+/**
+ * Custom Notification System
+ */
+function showNotification(title, message, type = 'success') {
+    // Remove existing notification if any
+    const existing = document.querySelector('.custom-notification');
+    if (existing) existing.remove();
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `custom-notification ${type}`;
+    
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${icon}"></i>
+            <div class="notification-text">
+                <div class="notification-title">${title}</div>
+                <div class="notification-message">${message}</div>
+            </div>
+            <button class="notification-close">&times;</button>
+        </div>
+        <div class="notification-progress"></div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Close button logic
+    notification.querySelector('.notification-close').onclick = () => {
+        notification.classList.add('hiding');
+        setTimeout(() => notification.remove(), 500);
+    };
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.classList.add('hiding');
+            setTimeout(() => notification.remove(), 500);
+        }
+    }, 5000);
+}
