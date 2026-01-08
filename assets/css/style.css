@@ -6,11 +6,11 @@
     /* Light Concrete */
     --concrete-dark: #94a3b8;
     /* Darker Concrete for text */
-    --accent-gold: #fbbf24;
-    /* Construction / Warning Gold - used sparingly */
+    --accent-gold: #ffa64d;
+    /* Construction / Warning Orange - used sparingly */
     --white: #ffffff;
-    --font-main: "Inter", sans-serif;
-    --font-mono: "Roboto Mono", monospace;
+    --font-main: 'Inter', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
     /* For technical details */
     --transition-slow: 0.8s cubic-bezier(0.25, 1, 0.5, 1);
     --transition-fast: 0.3s ease;
@@ -93,9 +93,7 @@ h3 {
 .beam {
     position: absolute;
     background-color: rgba(226, 232, 240, 0.1);
-    transition:
-        width 0.1s linear,
-        height 0.1s linear;
+    transition: width 0.1s linear, height 0.1s linear;
 }
 
 /* Specific Beam Classes (controlled by JS) */
@@ -128,12 +126,37 @@ h3 {
 }
 
 .nav-logo {
+    display: flex;
+    align-items: center;
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 400;
     letter-spacing: -0.05em;
-    font-family: "Open Sans", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     color: var(--white);
     padding: 0.2rem 1rem;
+    line-height: 1;
+}
+
+.nav-logo img {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+}
+
+.nav-logo span {
+    display: inline;
+    vertical-align: baseline;
+    line-height: 1;
+}
+
+.nav-logo-accent {
+    color: var(--accent-gold);
+    display: inline;
+    vertical-align: baseline;
+}
+
+.nav-logo-accent {
+    color: var(--accent-gold);
 }
 
 .nav-links {
@@ -150,7 +173,7 @@ h3 {
 }
 
 .nav-link::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -5px;
     left: 0;
@@ -180,6 +203,7 @@ h3 {
     padding-bottom: 4rem !important;
 }
 
+
 .hero-content {
     max-width: 800px;
 }
@@ -205,7 +229,7 @@ h3 {
 }
 
 .hero-btn::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: -100%;
@@ -300,7 +324,6 @@ footer {
     border-top: 1px solid rgba(251, 191, 36, 0.1);
     border-bottom: 1px solid rgba(251, 191, 36, 0.1);
     padding: 8rem 40px !important;
-    margin-bottom: 4rem !important;
 }
 
 .glow-text {
@@ -400,20 +423,8 @@ footer {
     transform-style: preserve-3d;
     transform: rotateX(60deg) translateZ(-100px);
     /* animation: removed for scroll control */
-    mask-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 20%,
-        rgba(0, 0, 0, 1) 80%,
-        rgba(0, 0, 0, 0) 100%
-    );
-    -webkit-mask-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 20%,
-        rgba(0, 0, 0, 1) 80%,
-        rgba(0, 0, 0, 0) 100%
-    );
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0) 100%);
     background-position: 0 0;
 }
 
@@ -429,16 +440,8 @@ footer {
     background-size: 250px 250px;
     transform: rotateX(60deg) translateZ(-200px);
     /* animation: removed for scroll control */
-    mask-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 20%
-    );
-    -webkit-mask-image: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 20%
-    );
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 20%);
     background-position: 0 0;
 }
 
@@ -447,9 +450,7 @@ footer {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(15, 23, 42, 0.5);
     overflow: hidden;
-    transition:
-        transform 0.3s ease,
-        border-color 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .module-card:hover {
@@ -485,6 +486,7 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+
 .module-content p {
     opacity: 0.7;
     margin-top: 1rem;
@@ -503,6 +505,7 @@ footer {
 }
 
 @media (max-width: 768px) {
+
     /* Typography Adjustments */
     h1 {
         font-size: 3rem;
@@ -633,7 +636,7 @@ footer {
     /* Move checkbox to the end or start? Let's keep visually consistent */
 }
 
-/* Re-adjusting grid for visual flow: Checkbox first? usually better.
+/* Re-adjusting grid for visual flow: Checkbox first? usually better. 
    My HTML has checkbox div first in DOM, but visually I might want ID first.
    Let's check HTML structure: checkbox, id, name, price.
    CSS Grid columns: 50px (checkbox) 50px (ID) 1fr (Name) 100px (Price).
@@ -651,13 +654,14 @@ footer {
     /* First column */
 }
 
+
 .module-item.selected .checkbox-custom {
     background-color: var(--accent-gold);
     border-color: var(--accent-gold);
 }
 
 .module-item.selected .checkbox-custom::after {
-    content: "\f00c";
+    content: '\f00c';
     /* FontAwesome check */
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -837,6 +841,7 @@ footer {
 }
 
 @media (max-width: 768px) {
+
     .video-grid,
     .video-grid-imposing {
         grid-template-columns: 1fr;
@@ -857,9 +862,7 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    transition:
-        background 0.5s ease,
-        backdrop-filter 0.5s ease;
+    transition: background 0.5s ease, backdrop-filter 0.5s ease;
 }
 
 .module-overlay.active {
@@ -971,12 +974,8 @@ footer {
     margin-top: 0.2rem;
 }
 
-.custom-notification.success i {
-    color: #10b981;
-}
-.custom-notification.error i {
-    color: #ef4444;
-}
+.custom-notification.success i { color: #10b981; }
+.custom-notification.error i { color: #ef4444; }
 
 .notification-text {
     flex: 1;
@@ -1018,7 +1017,7 @@ footer {
 }
 
 .notification-progress::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -1028,42 +1027,22 @@ footer {
     animation: progress 5s linear forwards;
 }
 
-.custom-notification.success .notification-progress::after {
-    background: #10b981;
-}
-.custom-notification.error .notification-progress::after {
-    background: #ef4444;
-}
+.custom-notification.success .notification-progress::after { background: #10b981; }
+.custom-notification.error .notification-progress::after { background: #ef4444; }
 
 @keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
 }
 
 @keyframes progress {
-    from {
-        width: 100%;
-    }
-    to {
-        width: 0%;
-    }
+    from { width: 100%; }
+    to { width: 0%; }
 }
 
 @media (max-width: 480px) {
